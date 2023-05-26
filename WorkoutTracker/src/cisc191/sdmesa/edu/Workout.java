@@ -1,5 +1,7 @@
 package cisc191.sdmesa.edu;
 
+import java.util.ArrayList;
+
 /**
  * Lead Author(s):
  * 
@@ -26,7 +28,7 @@ public class Workout
 	private String name;
 
 	// A workout has data (entries)
-	private WorkoutEntry[] workoutData = new WorkoutEntry[99];
+	private ArrayList<WorkoutEntry> entries = new ArrayList<>();
 
 	// Constructors
 
@@ -64,9 +66,9 @@ public class Workout
 	 *
 	 * @return the workout data entries
 	 */
-	public WorkoutEntry[] getData()
+	public ArrayList<WorkoutEntry> getData()
 	{
-		return workoutData;
+		return entries;
 	}
 
 	// Setters
@@ -86,9 +88,9 @@ public class Workout
 	 *
 	 * @param data the workout data entries
 	 */
-	public void setData(WorkoutEntry[] data)
+	public void setWorkoutEntries(ArrayList<WorkoutEntry> entries)
 	{
-		this.workoutData = data;
+		this.entries = entries;
 	}
 
 	/**
@@ -99,18 +101,8 @@ public class Workout
 	 *                                   the data entry
 	 */
 	public void addDataEntry(WorkoutEntry entry)
-			throws NoAvailableSpaceException
 	{
-		for (int i = 0; i < workoutData.length; i++)
-		{
-			if (workoutData[i] == null)
-			{
-				workoutData[i] = entry;
-				return;
-			}
-		}
-
-		throw new NoAvailableSpaceException();
+		this.entries.add(entry);
 	}
 
 	/**
@@ -118,12 +110,9 @@ public class Workout
 	 */
 	public void displayWorkoutData()
 	{
-		for (WorkoutEntry entry : workoutData)
+		for (WorkoutEntry entry : entries)
 		{
-			if (entry != null)
-			{
-				entry.printEntry();
-			}
+			entry.printEntry();
 		}
 	}
 }
