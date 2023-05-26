@@ -1,0 +1,13 @@
+PLAN : My First Plan
+WORKOUT : Push Ups
+WORKOUT : Pull Ups
+END_PLAN
+PLAN : A Really Hard Plan
+WORKOUT : Bench Press
+WORKOUT : Squats
+END_PLAN
+PLAN : Skateboarder Plan
+WORKOUT : Kickflips
+WORKOUT : Ollies
+WORKOUT : Pop Shuvits
+END_PLAN
