@@ -7,4 +7,5 @@
  */
 module WorkoutTracker
 {
+	requires java.desktop;
 }

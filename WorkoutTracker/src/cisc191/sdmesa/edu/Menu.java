@@ -43,7 +43,7 @@ public class Menu
 		Scanner keyboard = new Scanner(System.in);
 		int mainSelection = -1;
 
-		while (mainSelection != 4)
+		do
 		{
 			System.out.println("Hello, " + user.getUsername() + "!");
 			System.out.println("\n" + "Main Menu");
@@ -93,7 +93,7 @@ public class Menu
 				keyboard.nextLine();
 			}
 
-		}
+		} while (mainSelection != 4);
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class Menu
 
 		int selection = -1;
 
-		while (selection != 1)
+		do
 		{
 			System.out.println("1. Return to the main menu");
 			System.out.println();
@@ -137,7 +137,7 @@ public class Menu
 						"Invalid input. Select one of the given options.");
 				keyboard.nextLine();
 			}
-		}
+		} while (selection != 1);
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class Menu
 		// Menu selector
 		int selection = -1;
 
-		while (selection != 4)
+		do
 		{
 
 			try
@@ -206,14 +206,14 @@ public class Menu
 			catch (InvalidInputException e)
 			{
 				System.err.println(e.getMessage());
-				keyboard.nextLine();
 			}
-			catch (NoAvailableSpaceException e)
+			catch (InputMismatchException e)
 			{
-				e.printStackTrace();
+				System.err.println(
+						"Invalid input. Select one of the given options.");
 				keyboard.nextLine();
 			}
-		}
+		} while (selection != 4);
 	}
 
 	/**
@@ -281,7 +281,7 @@ public class Menu
 		// Menu selector
 		int menuSelection = -1;
 
-		while (menuSelection != 3)
+		do
 		{
 			System.out.println("\n" + plan.getName());
 			System.out.println("--------------------");
@@ -313,12 +313,18 @@ public class Menu
 						throw new InvalidInputException();
 				}
 			}
-			catch (InputMismatchException e)
+			catch (InvalidInputException e)
 			{
 				System.err.println(e.getMessage());
+			}
+			catch (InputMismatchException e)
+			{
+				System.err.println(
+						"Invalid input. Select one of the given options.");
 				keyboard.nextLine();
 			}
-		}
+
+		} while (menuSelection != 3);
 	}
 
 	/**
@@ -367,7 +373,7 @@ public class Menu
 	{
 		int selection = -1;
 
-		while (selection != 3)
+		do
 		{
 			System.out.println("\n" + workout.getName());
 			System.out.println("--------------------");
@@ -403,15 +409,15 @@ public class Menu
 			catch (InvalidInputException e)
 			{
 				System.err.println(e.getMessage());
-				keyboard.nextLine();
 			}
-			catch (NoAvailableSpaceException e)
+			catch (InputMismatchException e)
 			{
-				System.err.println(e.getMessage());
+				System.err.println(
+						"Invalid input. Select one of the given options.");
 				keyboard.nextLine();
 			}
 
-		}
+		} while (selection != 3);
 
 	}
 
@@ -436,10 +442,11 @@ public class Menu
 			System.out.println("3. Weighted Training");
 			System.out.print("Enter your choice: ");
 
-			int selection = keyboard.nextInt();
+			int selection = -1;
 
-			while (selection != 3)
+			do
 			{
+				selection = keyboard.nextInt();
 				switch (selection)
 				{
 					case 1:
@@ -481,33 +488,60 @@ public class Menu
 					default:
 						throw new InvalidInputException();
 				}
-			}
+			} while (selection != 3);
 		}
 		catch (InvalidInputException e)
 		{
 			System.err.println(e.getMessage());
+		}
+		catch (InputMismatchException e)
+		{
+			System.err
+					.println("Invalid input. Select one of the given options.");
 			keyboard.nextLine();
 		}
 		finally
 		{
-			workout.addEntry(entry);
+			if (entry != null)
+			{
+				workout.addEntry(entry);
+			}
 		}
 	}
 
 	public static void deleteAnEntry(Workout workout, Scanner keyboard)
 	{
-
 		System.out.println("Which entry would you like to delete?");
-		int selection = keyboard.nextInt();
+		int numberOfEntries = workout.getData().size();
 
-		try
+		if (numberOfEntries == 0)
 		{
-			workout.removeEntry(selection);
+			System.err.println("No entries available to delete.");
+			return;
 		}
-		catch (InputMismatchException e)
-		{
 
-		}
+		int selection = -1;
+
+		do
+		{
+			try
+			{
+				selection = keyboard.nextInt();
+
+				if (selection < 1 || selection > numberOfEntries)
+				{
+					System.out.println(
+							"Invalid input. Please enter a number between 1 and "
+									+ numberOfEntries + ".");
+				}
+			}
+			catch (InputMismatchException e)
+			{
+				System.out
+						.println("Invalid input. Please enter a valid number.");
+				keyboard.nextLine(); // Consume the invalid input
+			}
+		} while (selection < 1 || selection > numberOfEntries);
 
 		workout.removeEntry(selection);
 	}
