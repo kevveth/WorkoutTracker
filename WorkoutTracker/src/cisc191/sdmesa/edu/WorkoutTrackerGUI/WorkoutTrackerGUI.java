@@ -31,6 +31,9 @@ import cisc191.sdmesa.edu.WorkoutPlan;
  *         Java AWT | BorderLayout Class
  *         https://www.geeksforgeeks.org/java-awt-borderlayout-class/
  * 
+ *         How to Use Scroll Panes
+ *         https://docs.oracle.com/javase/tutorial/uiswing/components/scrollpane.html
+ * 
  *
  *         Version: v1
  * 
