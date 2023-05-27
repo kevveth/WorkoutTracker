@@ -1,31 +1,49 @@
 package cisc191.sdmesa.edu.WorkoutTrackerGUI;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import cisc191.sdmesa.edu.User;
 import cisc191.sdmesa.edu.Workout;
 import cisc191.sdmesa.edu.WorkoutPlan;
 
+/**
+ * Lead Author(s):
+ * 
+ * @author Kenneth Rathbun : 0005493428
+ *
+ *         References:
+ *         Morelli, R., & Walde, R. (2016).
+ *         Java, Java, Java: Object-Oriented Problem Solving
+ *         Retrieved from
+ *         https://open.umn.edu/opentextbooks/textbooks/java-java-
+ *         java-object-oriented-problem-solving
+ * 
+ *         Java AWT | BorderLayout Class
+ *         https://www.geeksforgeeks.org/java-awt-borderlayout-class/
+ * 
+ *
+ *         Version: v1
+ * 
+ *         Responsibilites:
+ *         - Display user's information and workout data through a GUI
+ */
+@SuppressWarnings("serial")
 public class WorkoutTrackerGUI extends JFrame
 {
 	private User user;
 	private JTextArea userInfoArea;
-	private DefaultListModel<String> planListModel;
+	private DefaultListModel<String> workoutPlansModel;
+	private JList<String> planList;
 
 	public WorkoutTrackerGUI(User user)
 	{
@@ -34,129 +52,91 @@ public class WorkoutTrackerGUI extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
 
-		// Create the components
+		// User Info Area
 		userInfoArea = new JTextArea();
 		userInfoArea.setEditable(false);
 		JScrollPane userInfoScrollPane = new JScrollPane(userInfoArea);
+		userInfoScrollPane.setPreferredSize(new Dimension(400, 200));
 
-		JList<String> planList = new JList<>();
-		planListModel = new DefaultListModel<>();
-		planList.setModel(planListModel);
+		// Workout Plans List
+		workoutPlansModel = new DefaultListModel<>();
+		planList = new JList<>(workoutPlansModel);
 		planList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		JScrollPane planListScrollPane = new JScrollPane(planList);
 
-		JButton addButton = new JButton("Add Plan");
-		addButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				addWorkoutPlan();
-			}
-		});
+		// Add Workout Plans Scroll Pane
+		AddWorkoutPlansScrollPane addPlansScrollPane = new AddWorkoutPlansScrollPane(
+				planList);
 
-		planList.addListSelectionListener(new ListSelectionListener()
-		{
-			public void valueChanged(ListSelectionEvent e)
-			{
-				if (!e.getValueIsAdjusting())
-				{
-					String selectedPlan = planList.getSelectedValue();
-					if (selectedPlan != null)
-					{
-						WorkoutPlan workoutPlan = findWorkoutPlan(selectedPlan);
-						if (workoutPlan != null)
-						{
-							displayWorkouts(workoutPlan);
-						}
-					}
-				}
-			}
-		});
+		// List Selection Listener for Workout Plans
+		AddWorkoutPlansScrollPaneListener listSelectionListener = new AddWorkoutPlansScrollPaneListener(
+				user, this, addPlansScrollPane);
+		planList.addListSelectionListener(listSelectionListener);
 
-		// Load the user's information and workout plans
-		displayUserData();
+		JScrollPane planScrollPane = new JScrollPane(addPlansScrollPane);
 
-		// Add the components to the frame
+		// Add Plan Button
+		AddPlanButton addButton = new AddPlanButton(user, this);
+
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		panel.add(addButton, BorderLayout.NORTH);
-		panel.add(planListScrollPane, BorderLayout.CENTER);
+		panel.add(planScrollPane, BorderLayout.CENTER);
 
 		add(userInfoScrollPane, BorderLayout.NORTH);
 		add(panel, BorderLayout.CENTER);
 
 		pack();
+		setSize(600, 400);
 		setVisible(true);
+
+		displayUserData();
 	}
 
-	private void displayUserData()
+	public void displayUserData()
 	{
-		// Set the user's information in the text area
+		workoutPlansModel.clear();
+
 		String userInfo = user.toString();
 		userInfoArea.setText(userInfo);
 
-		// Add the user's workout plans to the list
 		ArrayList<WorkoutPlan> plans = user.getWorkoutPlans();
 		for (WorkoutPlan plan : plans)
 		{
-			planListModel.addElement(plan.getName());
+			workoutPlansModel.addElement(plan.getName());
 		}
 	}
 
-	private void addWorkoutPlan()
+	public void displayWorkouts(WorkoutPlan plan)
 	{
-		String name = JOptionPane.showInputDialog(this,
-				"Enter the name of the new workout plan:");
-		if (name != null && !name.isEmpty())
+		JTextArea workoutsArea = new JTextArea();
+		workoutsArea.setEditable(false);
+
+		StringBuilder workoutsInfo = new StringBuilder();
+		workoutsInfo.append("~Workouts for ").append(plan.getName())
+				.append("~\n");
+		for (Workout workout : plan.getWorkouts())
 		{
-			user.addWorkoutPlan(name);
-			planListModel.addElement(name);
+			workoutsInfo.append(workout.getName()).append("\n");
 		}
-	}
+		workoutsArea.setText(workoutsInfo.toString());
 
-	private WorkoutPlan findWorkoutPlan(String planName)
-	{
-		ArrayList<WorkoutPlan> plans = user.getWorkoutPlans();
-		for (WorkoutPlan plan : plans)
-		{
-			if (plan.getName().equals(planName))
-			{
-				return plan;
-			}
-		}
-		return null;
-	}
-
-	private void displayWorkouts(WorkoutPlan workoutPlan)
-	{
-		JFrame workoutPlanFrame = new JFrame(
-				workoutPlan.getName() + " Workouts");
-		workoutPlanFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		workoutPlanFrame.setLayout(new BorderLayout());
-
-		JList<String> workoutList = new JList<>();
-		DefaultListModel<String> workoutListModel = new DefaultListModel<>();
-		workoutList.setModel(workoutListModel);
-		workoutList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		JScrollPane workoutScrollPane = new JScrollPane(workoutList);
-
-		ArrayList<Workout> workouts = workoutPlan.getWorkouts();
-		for (Workout workout : workouts)
-		{
-			workoutListModel.addElement(workout.getName());
-		}
-
-		workoutPlanFrame.add(workoutScrollPane, BorderLayout.CENTER);
-		workoutPlanFrame.pack();
-		workoutPlanFrame.setVisible(true);
+		JFrame workoutsFrame = new JFrame("Workouts");
+		workoutsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		workoutsFrame.add(new JScrollPane(workoutsArea));
+		workoutsFrame.pack();
+		workoutsFrame.setVisible(true);
 	}
 
 	public static void main(String[] args)
 	{
-		// Create a user object
-		User user = new User();
-
-		// Create and display the GUI
-		WorkoutTrackerGUI gui = new WorkoutTrackerGUI(user);
+		try
+		{
+			User user = new User();
+			new WorkoutTrackerGUI(user);
+		}
+		catch (Exception e)
+		{
+			System.err.println("There was an error. " + e.getCause());
+		}
 	}
 }
