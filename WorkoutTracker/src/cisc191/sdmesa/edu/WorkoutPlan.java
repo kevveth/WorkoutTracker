@@ -1,5 +1,7 @@
 package cisc191.sdmesa.edu;
 
+import java.util.ArrayList;
+
 /**
  * Lead Author(s):
  * 
@@ -28,8 +30,7 @@ public class WorkoutPlan
 
 	// A workout plan has a list of workouts
 	// Should pull data in from a text file
-	private Workout[] workouts = new Workout[20];
-
+	private ArrayList<Workout> workouts = new ArrayList<>();
 	// Constructors
 
 	/**
@@ -67,7 +68,7 @@ public class WorkoutPlan
 	 *
 	 * @return the list of workouts
 	 */
-	public Workout[] getWorkouts()
+	public ArrayList<Workout> getWorkouts()
 	{
 		return workouts;
 	}
@@ -89,7 +90,7 @@ public class WorkoutPlan
 	 *
 	 * @param workouts the list of workouts
 	 */
-	public void setWorkouts(Workout[] workouts)
+	public void setWorkouts(ArrayList<Workout> workouts)
 	{
 		this.workouts = workouts;
 	}
@@ -101,55 +102,27 @@ public class WorkoutPlan
 	 */
 	public void addWorkout(String name)
 	{
-		for (int i = 0; i < workouts.length; i++)
-		{
-			if (workouts[i] == null)
-			{
-				workouts[i] = new Workout(name);
-				return;
-			}
-		}
-
-		System.out.println("Cannot add more workouts to this plan.");
+		workouts.add(new Workout(name));
 	}
 
 	/**
 	 * Adds a new workout to the workout plan.
 	 *
-	 * @param currentWorkout the workout to add
+	 * @param workout the workout to add
 	 */
-	public void addWorkout(Workout currentWorkout)
+	public void addWorkout(Workout workout)
 	{
-		for (int i = 0; i < workouts.length; i++)
-		{
-			if (workouts[i] == null)
-			{
-				workouts[i] = currentWorkout;
-				return;
-			}
-		}
-
-		System.out.println("Cannot add more workouts to this plan.");
+		workouts.add(workout);
 	}
 
 	/**
-	 * Deletes the workout with the specified name from the workout plan.
+	 * Deletes the workout at the specified index from the workout plan.
 	 *
 	 * @param name the name of the workout to delete
 	 */
-	public void deleteWorkout(String name)
+	public void deleteWorkout(int index)
 	{
-		for (int i = 0; i < workouts.length; i++)
-		{
-			if (workouts[i] != null && workouts[i].getName().equals(name))
-			{
-				workouts[i] = null;
-				System.out.println("Workout deleted.");
-				return;
-			}
-		}
-
-		System.err.println("Workout '" + name + "' not found.");
+		this.workouts.remove(index - 1);
 	}
 
 	/**
@@ -157,12 +130,12 @@ public class WorkoutPlan
 	 */
 	public void displayWorkoutList()
 	{
-		for (int i = 0; i < workouts.length; i++)
+		for (int i = 0; i < workouts.size(); i++)
 		{
-			if (workouts[i] != null)
-			{
-				System.out.println((i + 1) + ". " + workouts[i].getName());
-			}
+			Workout workout = workouts.get(i);
+
+			System.out.println((i + 1) + ". " + workout.getName());
+
 		}
 		System.out.println();
 	}

@@ -1,5 +1,7 @@
 package cisc191.sdmesa.edu;
 
+import java.util.ArrayList;
+
 /**
  * Lead Author(s):
  * 
@@ -29,7 +31,7 @@ public class User
 	private String bio;
 
 	// The user has a list of workout plans
-	private WorkoutPlan[] workoutPlans = new WorkoutPlan[20];
+	private ArrayList<WorkoutPlan> plans = new ArrayList<>();
 
 	/**
 	 * Default constructor for the User class.
@@ -77,9 +79,9 @@ public class User
 	 *
 	 * @return An array of workout plans belonging to the user.
 	 */
-	public WorkoutPlan[] getWorkoutPlans()
+	public ArrayList<WorkoutPlan> getWorkoutPlans()
 	{
-		return workoutPlans;
+		return plans;
 	}
 
 	/**
@@ -107,31 +109,19 @@ public class User
 	 *
 	 * @param workoutPlans An array of workout plans to be assigned to the user.
 	 */
-	public void setWorkoutPlans(WorkoutPlan[] workoutPlans)
+	public void setWorkoutPlans(ArrayList<WorkoutPlan> workoutPlans)
 	{
-		this.workoutPlans = workoutPlans;
+		this.plans = workoutPlans;
 	}
 
 	/**
 	 * Adds a new workout plan to the user's collection of workout plans.
 	 *
 	 * @param name The name of the new workout plan.
-	 * @throws NoAvailableSpaceException if there is no available space to add
-	 *                                   the workout plan.
 	 */
-	public void addWorkoutPlan(String name) throws NoAvailableSpaceException
+	public void addWorkoutPlan(String name)
 	{
-		for (int i = 0; i < workoutPlans.length; i++)
-		{
-			if (workoutPlans[i] == null)
-			{
-				workoutPlans[i] = new WorkoutPlan(name);
-				// System.out.println("Created Successfully!");
-				return;
-			}
-		}
-
-		throw new NoAvailableSpaceException();
+		plans.add(new WorkoutPlan(name));
 
 	}
 
@@ -142,22 +132,7 @@ public class User
 	 */
 	public void addWorkoutPlan(WorkoutPlan plan)
 	{
-		try
-		{
-			for (int i = 0; i < workoutPlans.length; i++)
-			{
-				if (workoutPlans[i] == null)
-				{
-					workoutPlans[i] = plan;
-					return;
-				}
-			}
-			throw new NoAvailableSpaceException();
-		}
-		catch (NoAvailableSpaceException e)
-		{
-			System.err.println(e.getMessage());
-		}
+		plans.add(plan);
 	}
 
 	/**
@@ -165,23 +140,9 @@ public class User
 	 *
 	 * @param indexToDelete The index of the workout plan to be deleted.
 	 */
-	public void deleteWorkoutPlan(int indexToDelete)
+	public void deleteWorkoutPlan(int index)
 	{
-		if (indexToDelete < 0 || indexToDelete >= workoutPlans.length)
-		{
-			System.out.println("Invalid index.");
-			return;
-		}
-		if (workoutPlans[indexToDelete - 1] != null)
-		{
-			workoutPlans[indexToDelete - 1] = null;
-			System.out.println("Workout plan deleted.");
-		}
-		else
-		{
-			System.out.println(
-					"No workout plan found at index " + indexToDelete + ".");
-		}
+		plans.remove(index - 1);
 	}
 
 	/**
@@ -189,12 +150,13 @@ public class User
 	 */
 	public void displayWorkoutPlanList()
 	{
-		for (int i = 0; i < workoutPlans.length; i++)
+
+		for (int i = 0; i < plans.size(); i++)
 		{
-			if (workoutPlans[i] != null)
-			{
-				System.out.println((i + 1) + ". " + workoutPlans[i].getName());
-			}
+			WorkoutPlan plan = plans.get(i);
+
+			System.out.println((i + 1) + ". " + plan.getName());
+
 		}
 		System.out.println();
 	}

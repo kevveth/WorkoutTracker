@@ -1,10 +1,11 @@
 package cisc191.sdmesa.edu;
 
-import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Lead Author(s):
@@ -71,7 +72,7 @@ public class WorkoutTrackerIO
 	public static void saveWorkoutData(User user)
 	{
 		BufferedWriter writer = null;
-		WorkoutPlan[] workoutPlans = user.getWorkoutPlans();
+		ArrayList<WorkoutPlan> workoutPlans = user.getWorkoutPlans();
 
 		try
 		{
@@ -80,24 +81,18 @@ public class WorkoutTrackerIO
 			// Write user's workout plans
 			for (WorkoutPlan plan : workoutPlans)
 			{
-				if (plan != null)
+				writer.write("PLAN : " + plan.getName() + "\n");
+
+				// Write plan's workouts
+				ArrayList<Workout> workouts = plan.getWorkouts();
+
+				for (Workout workout : workouts)
 				{
-					writer.write("PLAN : " + plan.getName() + "\n");
-
-					// Write plan's workouts
-					Workout[] workouts = plan.getWorkouts();
-
-					for (Workout workout : workouts)
-					{
-						if (workout != null)
-						{
-							writer.write(
-									"WORKOUT : " + workout.getName() + "\n");
-						}
-					}
-
-					writer.write("END_PLAN\n");
+					writer.write(
+							"WORKOUT : " + workout.getName() + "\n");
 				}
+
+				writer.write("END_PLAN\n");
 			}
 		}
 		catch (IOException e)

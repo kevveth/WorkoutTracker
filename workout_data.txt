@@ -11,3 +11,6 @@ WORKOUT : Kickflips
 WORKOUT : Ollies
 WORKOUT : Pop Shuvits
 END_PLAN
+PLAN : A New Cool Plan
+WORKOUT : Leg Raises
+END_PLAN

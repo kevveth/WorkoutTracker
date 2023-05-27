@@ -2,6 +2,8 @@ package cisc191.sdmesa.edu;
 
 import java.util.ArrayList;
 
+import cisc191.sdmesa.edu.Exceptions.NoAvailableSpaceException;
+
 /**
  * Lead Author(s):
  * 
@@ -100,9 +102,19 @@ public class Workout
 	 * @throws NoAvailableSpaceException if there is no available space to add
 	 *                                   the data entry
 	 */
-	public void addDataEntry(WorkoutEntry entry)
+	public void addEntry(WorkoutEntry entry)
 	{
 		this.entries.add(entry);
+	}
+
+	/**
+	 * Removes a data entry from the workout.
+	 * 
+	 * @param index
+	 */
+	public void removeEntry(int index)
+	{
+		this.entries.remove(index - 1);
 	}
 
 	/**

@@ -1,8 +1,12 @@
 package cisc191.sdmesa.edu;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import cisc191.sdmesa.edu.Exceptions.InvalidInputException;
+import cisc191.sdmesa.edu.Exceptions.NoAvailableSpaceException;
 
 /**
  * Lead Author(s):
@@ -39,10 +43,9 @@ public class Menu
 		Scanner keyboard = new Scanner(System.in);
 		int mainSelection = -1;
 
-		System.out.println("Hello, " + user.getUsername() + "!");
-
 		while (mainSelection != 4)
 		{
+			System.out.println("Hello, " + user.getUsername() + "!");
 			System.out.println("\n" + "Main Menu");
 			System.out.println("--------------------");
 			System.out.println("1. View workout plans");
@@ -64,7 +67,7 @@ public class Menu
 						displayWorkoutPlansMenu(user, keyboard);
 						break;
 					case 2:
-						displayUserInfo(user);
+						displayUserInfo(user, keyboard);
 						break;
 					case 3:
 						save(user);
@@ -73,12 +76,20 @@ public class Menu
 						System.out.println("Exiting Workout Tracker...");
 						break;
 					default:
-						throw new InputMismatchException();
+						throw new InvalidInputException();
 				}
 			}
 			catch (InvalidInputException e)
 			{
 				System.err.println(e.getMessage());
+			}
+			catch (InputMismatchException e)
+			{
+				System.err.println(
+						"Invalid input. Select one of the given options.");
+			}
+			finally
+			{
 				keyboard.nextLine();
 			}
 
@@ -90,11 +101,43 @@ public class Menu
 	 * 
 	 * @param user the User object containing the user information
 	 */
-	public static void displayUserInfo(User user)
+	public static void displayUserInfo(User user, Scanner keyboard)
 	{
 		String userInfo = user.toString();
-
 		System.out.println(userInfo);
+
+		int selection = -1;
+
+		while (selection != 1)
+		{
+			System.out.println("1. Return to the main menu");
+			System.out.println();
+			System.out.print("Enter your choice: ");
+
+			try
+			{
+				selection = keyboard.nextInt();
+
+				switch (selection)
+				{
+					case 1:
+						System.out.println("Returning...");
+						break;
+					default:
+						throw new InvalidInputException();
+				}
+			}
+			catch (InvalidInputException e)
+			{
+				System.err.println(e.getMessage());
+			}
+			catch (InputMismatchException e)
+			{
+				System.err.println(
+						"Invalid input. Select one of the given options.");
+				keyboard.nextLine();
+			}
+		}
 	}
 
 	/**
@@ -157,7 +200,7 @@ public class Menu
 						System.out.println("Returning...");
 						break;
 					default:
-						throw new InputMismatchException();
+						throw new InvalidInputException();
 				}
 			}
 			catch (InvalidInputException e)
@@ -199,17 +242,17 @@ public class Menu
 	public static void viewWorkoutPlan(User user, Scanner keyboard)
 	{
 		System.out.println("Which plan would you like to view?");
-		WorkoutPlan[] plans = user.getWorkoutPlans();
+		ArrayList<WorkoutPlan> plans = user.getWorkoutPlans();
 		int planSelection = keyboard.nextInt();
 
-		if (planSelection < 1 || planSelection > plans.length)
+		if (planSelection < 1 || planSelection > plans.size())
 		{
 			System.err
 					.println("Invalid input. Select one of the given options.");
 			return;
 		}
 
-		displayWorkoutPlanMenu(plans[planSelection - 1], keyboard);
+		displayWorkoutPlanMenu(plans.get(planSelection - 1), keyboard);
 	}
 
 	/**
@@ -267,13 +310,12 @@ public class Menu
 						System.out.println("Returning...");
 						break;
 					default:
-						throw new InputMismatchException();
+						throw new InvalidInputException();
 				}
 			}
 			catch (InputMismatchException e)
 			{
-				System.err.println(
-						"Invalid input. Select one of the given options.");
+				System.err.println(e.getMessage());
 				keyboard.nextLine();
 			}
 		}
@@ -302,17 +344,17 @@ public class Menu
 	public static void viewWorkout(WorkoutPlan plan, Scanner keyboard)
 	{
 		System.out.println("Which workout would you like to view?");
-		Workout[] workouts = plan.getWorkouts();
+		ArrayList<Workout> workouts = plan.getWorkouts();
 		int workoutSelection = keyboard.nextInt();
 
-		if (workoutSelection < 1 || workoutSelection > workouts.length)
+		if (workoutSelection < 1 || workoutSelection > workouts.size())
 		{
 			System.err
 					.println("Invalid input. Select one of the given options.");
 			return;
 		}
 
-		displayWorkoutMenu(workouts[workoutSelection - 1], keyboard);
+		displayWorkoutMenu(workouts.get(workoutSelection - 1), keyboard);
 	}
 
 	/**
@@ -348,20 +390,19 @@ public class Menu
 						createNewEntry(workout, keyboard);
 						break;
 					case 2:
-						// Delete an entry
+						deleteAnEntry(workout, keyboard);
 						break;
 					case 3:
 						System.out.println("Returning...");
 						break;
 					default:
-						throw new InputMismatchException();
+						throw new InvalidInputException();
 
 				}
 			}
-			catch (InputMismatchException e)
+			catch (InvalidInputException e)
 			{
-				System.err.println(
-						"Invalid input. Select one of the given options.");
+				System.err.println(e.getMessage());
 				keyboard.nextLine();
 			}
 			catch (NoAvailableSpaceException e)
@@ -387,56 +428,59 @@ public class Menu
 	{
 		WorkoutEntry entry = null;
 
-		System.out.println("Enter the type of workout:");
-		System.out.println("1. Cardio");
-		System.out.println("2. Strength Training");
-		System.out.println("3. Weighted Training");
-		System.out.print("Enter your choice: ");
-
-		int selection = keyboard.nextInt();
-
 		try
 		{
-			switch (selection)
+			System.out.println("Enter the type of workout:");
+			System.out.println("1. Cardio");
+			System.out.println("2. Strength Training");
+			System.out.println("3. Weighted Training");
+			System.out.print("Enter your choice: ");
+
+			int selection = keyboard.nextInt();
+
+			while (selection != 3)
 			{
-				case 1:
-					int distance, duration;
-					System.out.println("Enter the distance (in miles): ");
-					distance = keyboard.nextInt();
-					System.out.println("Enter the duration (in minutes): ");
-					duration = keyboard.nextInt();
-					entry = new CardioEntry(distance, duration);
-					break;
-				case 2:
-					int sets, reps;
-					System.out.println("Enter the number of sets: ");
-					sets = keyboard.nextInt();
-					if (sets < 0)
-					{
-						throw new InvalidInputException(sets);
-					}
+				switch (selection)
+				{
+					case 1:
+						int distance, duration;
+						System.out.println("Enter the distance (in miles): ");
+						distance = keyboard.nextInt();
+						System.out.println("Enter the duration (in minutes): ");
+						duration = keyboard.nextInt();
+						entry = new CardioEntry(distance, duration);
+						break;
+					case 2:
+						int sets, reps;
+						System.out.println("Enter the number of sets: ");
+						sets = keyboard.nextInt();
+						if (sets < 0)
+						{
+							throw new InvalidInputException(sets);
+						}
 
-					System.out.println("Enter the number of reps: ");
-					reps = keyboard.nextInt();
-					if (reps < 0)
-					{
-						throw new InvalidInputException(reps);
-					}
+						System.out.println("Enter the number of reps: ");
+						reps = keyboard.nextInt();
+						if (reps < 0)
+						{
+							throw new InvalidInputException(reps);
+						}
 
-					entry = new StrengthTrainingEntry(sets, reps);
-					break;
-				case 3:
-					int weight;
-					System.out.println("Enter the amount of weight: ");
-					weight = keyboard.nextInt();
-					System.out.println("Enter the number of sets: ");
-					sets = keyboard.nextInt();
-					System.out.println("Enter the number of reps: ");
-					reps = keyboard.nextInt();
-					entry = new WeightedTrainingEntry(weight, sets, reps);
-					break;
-				default:
-					throw new InputMismatchException();
+						entry = new StrengthTrainingEntry(sets, reps);
+						break;
+					case 3:
+						int weight;
+						System.out.println("Enter the amount of weight: ");
+						weight = keyboard.nextInt();
+						System.out.println("Enter the number of sets: ");
+						sets = keyboard.nextInt();
+						System.out.println("Enter the number of reps: ");
+						reps = keyboard.nextInt();
+						entry = new WeightedTrainingEntry(weight, sets, reps);
+						break;
+					default:
+						throw new InvalidInputException();
+				}
 			}
 		}
 		catch (InvalidInputException e)
@@ -446,7 +490,25 @@ public class Menu
 		}
 		finally
 		{
-			workout.addDataEntry(entry);
+			workout.addEntry(entry);
 		}
+	}
+
+	public static void deleteAnEntry(Workout workout, Scanner keyboard)
+	{
+
+		System.out.println("Which entry would you like to delete?");
+		int selection = keyboard.nextInt();
+
+		try
+		{
+			workout.removeEntry(selection);
+		}
+		catch (InputMismatchException e)
+		{
+
+		}
+
+		workout.removeEntry(selection);
 	}
 }

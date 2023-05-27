@@ -1,4 +1,4 @@
-package cisc191.sdmesa.edu;
+package cisc191.sdmesa.edu.Exceptions;
 
 import java.util.InputMismatchException;
 
@@ -14,14 +14,14 @@ public class InvalidInputException extends InputMismatchException
 
 	public InvalidInputException(int input)
 	{
-		this.message = "You entered: " + input
+		InvalidInputException.message = "You entered: " + input
 				+ ". Please enter a number greater than 0.";
 	}
 
 	@Override
 	public String getMessage()
 	{
-		return this.message;
+		return InvalidInputException.message;
 	}
 
 }

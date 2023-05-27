@@ -1,4 +1,4 @@
-package cisc191.sdmesa.edu;
+package cisc191.sdmesa.edu.Exceptions;
 
 /**
  * Lead Author(s):
