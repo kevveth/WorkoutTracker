@@ -1,8 +1,13 @@
 package cisc191.sdmesa.edu.WorkoutTrackerGUI;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 import cisc191.sdmesa.edu.User;
+import cisc191.sdmesa.edu.WorkoutPlan;
 
 /**
  * Lead Author(s):
@@ -26,11 +31,29 @@ import cisc191.sdmesa.edu.User;
  *         - Button class for adding a workout plan to the WorkoutTrackerGUI.
  */
 @SuppressWarnings("serial")
-public class AddPlanButton extends JButton
+public class AddPlanButton extends JButton implements ActionListener
 {
+	private User user;
+	private WorkoutTrackerGUI gui;
+
 	public AddPlanButton(User user, WorkoutTrackerGUI gui)
 	{
 		super("Add Plan");
-		addActionListener(new AddPlanButtonListener(user, gui));
+		this.user = user;
+		this.gui = gui;
+		addActionListener(this);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		String planName = JOptionPane.showInputDialog(gui,
+				"Enter the name of the new workout plan:");
+		if (planName != null && !planName.isEmpty())
+		{
+			WorkoutPlan newPlan = new WorkoutPlan(planName);
+			user.addWorkoutPlan(newPlan);
+			gui.displayUserData();
+		}
 	}
 }
