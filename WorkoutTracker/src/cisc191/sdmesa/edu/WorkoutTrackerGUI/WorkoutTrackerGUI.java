@@ -58,8 +58,7 @@ public class WorkoutTrackerGUI extends JFrame
 		// User Info Area
 		userInfoArea = new JTextArea();
 		userInfoArea.setEditable(false);
-		JScrollPane userInfoScrollPane = new JScrollPane(userInfoArea);
-		userInfoScrollPane.setPreferredSize(new Dimension(400, 200));
+		userInfoArea.setPreferredSize(new Dimension(400, 200));
 
 		// Workout Plans List
 		workoutPlansModel = new DefaultListModel<>();
@@ -85,7 +84,7 @@ public class WorkoutTrackerGUI extends JFrame
 		panel.add(addButton, BorderLayout.NORTH);
 		panel.add(planScrollPane, BorderLayout.CENTER);
 
-		add(userInfoScrollPane, BorderLayout.NORTH);
+		add(userInfoArea, BorderLayout.NORTH);
 		add(panel, BorderLayout.CENTER);
 
 		pack();
