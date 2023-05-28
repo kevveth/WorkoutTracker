@@ -17,10 +17,6 @@ import javax.swing.event.ListSelectionListener;
  *         Retrieved from
  *         https://open.umn.edu/opentextbooks/textbooks/java-java-
  *         java-object-oriented-problem-solving
- * 
- *         Java AWT | BorderLayout Class
- *         https://www.geeksforgeeks.org/java-awt-borderlayout-class/
- * 
  *
  *         Version: v1
  * 
@@ -32,6 +28,11 @@ public class AddWorkoutPlansScrollPane extends JScrollPane
 {
 	private JList<String> planList;
 
+	/**
+	 * Constructs an AddWorkoutPlansScrollPane object.
+	 *
+	 * @param planList the JList representing the list of workout plans
+	 */
 	public AddWorkoutPlansScrollPane(JList<String> planList)
 	{
 		this.planList = planList;
@@ -39,16 +40,32 @@ public class AddWorkoutPlansScrollPane extends JScrollPane
 		setViewportView(planList);
 	}
 
+	/**
+	 * Sets the model for the list of workout plans.
+	 *
+	 * @param model the DefaultListModel representing the model for the list
+	 */
 	public void setModel(DefaultListModel<String> model)
 	{
 		planList.setModel(model);
 	}
 
+	/**
+	 * Adds a ListSelectionListener to the list of workout plans.
+	 *
+	 * @param listener the ListSelectionListener to be added
+	 */
 	public void addListSelectionListener(ListSelectionListener listener)
 	{
 		planList.addListSelectionListener(listener);
 	}
 
+	/**
+	 * Retrieves the selected workout plan.
+	 *
+	 * @return the selected workout plan as a String, or null if no plan is
+	 *         selected
+	 */
 	public String getSelectedPlan()
 	{
 		return planList.getSelectedValue();

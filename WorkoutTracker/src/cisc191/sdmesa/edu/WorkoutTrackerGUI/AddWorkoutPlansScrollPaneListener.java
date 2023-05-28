@@ -18,9 +18,6 @@ import cisc191.sdmesa.edu.WorkoutPlan;
  *         https://open.umn.edu/opentextbooks/textbooks/java-java-
  *         java-object-oriented-problem-solving
  * 
- *         Java AWT | BorderLayout Class
- *         https://www.geeksforgeeks.org/java-awt-borderlayout-class/
- * 
  *
  *         Version: v1
  * 
@@ -34,6 +31,17 @@ public class AddWorkoutPlansScrollPaneListener implements ListSelectionListener
 	private WorkoutTrackerGUI gui;
 	private AddWorkoutPlansScrollPane scrollPane;
 
+	/**
+	 * Constructs an AddWorkoutPlansScrollPaneListener object.
+	 *
+	 * @param user       the User object containing user's information and
+	 *                   workout data
+	 * @param gui        the WorkoutTrackerGUI object representing the main GUI
+	 *                   window
+	 * @param scrollPane the AddWorkoutPlansScrollPane object representing the
+	 *                   scroll pane
+	 *                   for adding workout plans
+	 */
 	public AddWorkoutPlansScrollPaneListener(User user, WorkoutTrackerGUI gui,
 			AddWorkoutPlansScrollPane scrollPane)
 	{
@@ -42,6 +50,11 @@ public class AddWorkoutPlansScrollPaneListener implements ListSelectionListener
 		this.scrollPane = scrollPane;
 	}
 
+	/**
+	 * Invoked when the selection of workout plans in the scroll pane changes.
+	 *
+	 * @param e the ListSelectionEvent representing the selection change event
+	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e)
 	{
@@ -59,6 +72,12 @@ public class AddWorkoutPlansScrollPaneListener implements ListSelectionListener
 		}
 	}
 
+	/**
+	 * Finds the workout plan with the specified name.
+	 *
+	 * @param planName the name of the workout plan to find
+	 * @return the WorkoutPlan object if found, or null if not found
+	 */
 	private WorkoutPlan findWorkoutPlan(String planName)
 	{
 		for (WorkoutPlan plan : user.getWorkoutPlans())

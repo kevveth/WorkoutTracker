@@ -48,6 +48,12 @@ public class WorkoutTrackerGUI extends JFrame
 	private DefaultListModel<String> workoutPlansModel;
 	private JList<String> planList;
 
+	/**
+	 * Constructs a WorkoutTrackerGUI object.
+	 *
+	 * @param user the User object containing user's information and workout
+	 *             data
+	 */
 	public WorkoutTrackerGUI(User user)
 	{
 		this.user = user;
@@ -94,6 +100,9 @@ public class WorkoutTrackerGUI extends JFrame
 		displayUserData();
 	}
 
+	/**
+	 * Displays the user's information and workout plans in the GUI.
+	 */
 	public void displayUserData()
 	{
 		workoutPlansModel.clear();
@@ -108,6 +117,11 @@ public class WorkoutTrackerGUI extends JFrame
 		}
 	}
 
+	/**
+	 * Displays the workouts for a specific workout plan in a separate window.
+	 *
+	 * @param plan the WorkoutPlan object containing the workouts to display
+	 */
 	public void displayWorkouts(WorkoutPlan plan)
 	{
 		JTextArea workoutsArea = new JTextArea();
@@ -129,6 +143,11 @@ public class WorkoutTrackerGUI extends JFrame
 		workoutsFrame.setVisible(true);
 	}
 
+	/**
+	 * The entry point of the WorkoutTracker.
+	 *
+	 * @param args the command-line arguments
+	 */
 	public static void main(String[] args)
 	{
 		try

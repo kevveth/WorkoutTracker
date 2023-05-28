@@ -20,10 +20,6 @@ import cisc191.sdmesa.edu.WorkoutPlan;
  *         Retrieved from
  *         https://open.umn.edu/opentextbooks/textbooks/java-java-
  *         java-object-oriented-problem-solving
- * 
- *         Java AWT | BorderLayout Class
- *         https://www.geeksforgeeks.org/java-awt-borderlayout-class/
- * 
  *
  *         Version: v1
  * 
@@ -36,6 +32,12 @@ public class AddPlanButton extends JButton implements ActionListener
 	private User user;
 	private WorkoutTrackerGUI gui;
 
+	/**
+	 * Constructs an AddPlanButton object.
+	 *
+	 * @param user the User object representing the user
+	 * @param gui  the WorkoutTrackerGUI object representing the GUI
+	 */
 	public AddPlanButton(User user, WorkoutTrackerGUI gui)
 	{
 		super("Add Plan");
@@ -44,6 +46,11 @@ public class AddPlanButton extends JButton implements ActionListener
 		addActionListener(this);
 	}
 
+	/**
+	 * Invoked when the "Add Plan" button is clicked.
+	 *
+	 * @param e the ActionEvent representing the button click event
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{

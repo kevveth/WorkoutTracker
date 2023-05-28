@@ -18,9 +18,6 @@ import cisc191.sdmesa.edu.WorkoutPlan;
  *         https://open.umn.edu/opentextbooks/textbooks/java-java-
  *         java-object-oriented-problem-solving
  * 
- *         Java AWT | BorderLayout Class
- *         https://www.geeksforgeeks.org/java-awt-borderlayout-class/
- * 
  *
  *         Version: v1
  * 
@@ -33,17 +30,27 @@ class AddPlanButtonListener implements ActionListener
 	private User user;
 	private WorkoutTrackerGUI gui;
 
+	/**
+	 * Constructs an AddPlanButtonListener object.
+	 *
+	 * @param user the User object representing the user
+	 * @param gui  the WorkoutTrackerGUI object representing the GUI
+	 */
 	public AddPlanButtonListener(User user, WorkoutTrackerGUI gui)
 	{
 		this.user = user;
 		this.gui = gui;
 	}
 
+	/**
+	 * Invoked when the "Add Plan" button is clicked.
+	 *
+	 * @param e the ActionEvent representing the button click event
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		String planName = "New Plan"; // Modify this to get the plan name from
-										// user input
+		String planName = "New Plan"; 
 		WorkoutPlan newPlan = new WorkoutPlan(planName);
 		user.addWorkoutPlan(newPlan);
 		gui.displayUserData();
